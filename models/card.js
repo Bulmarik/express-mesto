@@ -1,31 +1,32 @@
 const mongoose = require('mongoose');
-const {ObjectId} = mongoose.Types.ObjectId;
+
+const { ObjectId } = mongoose.Types.ObjectId;
 
 const cardSchema = new mongoose.Schema({
   name: {
     type: String,
     minlength: 2,
     maxlength: 30,
-    required: true
+    required: true,
   },
   link: {
     type: String,
-    required: true
+    required: true,
   },
   owner: {
     type: ObjectId,
-    required: true
+    required: true,
   },
   likes: [
     {
-    type: ObjectId,
-    default: []
-    }
+      type: ObjectId,
+      default: [],
+    },
   ],
   createAt: {
     type: Date,
-    default: Date.now
-  }
+    default: Date.now,
+  },
 });
 
 module.exports = mongoose.model('card', cardSchema);
