@@ -21,17 +21,23 @@ const createCard = (req, res) => {
 
 const deleteCard = (req, res) => {
   const id = req.params._id;
-  Card.findByIdAndRemove(id)
-    .orFail(new Error('NotValidId'))
-    .then((card) => res.status(200).send(card))
-    .catch((err) => {
-      if (err.name === 'CastError') {
-        return res.status(400).send({ message: 'Переданы некорректные данные' });
+  Card.findById(id)
+    .then((card) => {
+      if (card.owner !== req.user._id) {
+        return res.status(403).send({ message: 'Нельзя удалить чужую карточку' });
       }
-      if (err.message === 'NotValidId') {
-        return res.status(404).send({ message: 'Данная карточка не найдена' });
-      }
-      return res.status(500).send({ message: 'Произошла ошибка сервера' });
+      return Card.findByIdAndRemove(card._id)
+        .orFail(new Error('NotValidId'))
+        .then(() => res.status(200).send({ message: 'Удаление прошло удачно' }))
+        .catch((err) => {
+          if (err.name === 'CastError') {
+            return res.status(400).send({ message: 'Переданы некорректные данные' });
+          }
+          if (err.message === 'NotValidId') {
+            return res.status(404).send({ message: 'Данная карточка не найдена' });
+          }
+          return res.status(500).send({ message: 'Произошла ошибка сервера' });
+        });
     });
 };
 

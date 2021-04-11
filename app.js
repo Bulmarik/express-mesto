@@ -3,6 +3,9 @@ const express = require('express');
 const { PORT = 3000 } = process.env;
 const mongoose = require('mongoose');
 const router = require('./routes/index');
+const {
+  createUser, login,
+} = require('./controllers/users');
 
 const app = express();
 
@@ -13,11 +16,13 @@ mongoose.connect('mongodb://localhost:27017/mestodb', {
 });
 
 app.use(express.json());
-app.use((req, res, next) => {
-  req.user = {
-    _id: '606c5abff893571b309837e1',
-  };
-  next();
-});
+// app.use((req, res, next) => {
+//   req.user = {
+//     _id: '60702489627fe916f40a20ce',
+//   };
+//   next();
+// });
+app.post('/signin', login);
+app.post('/signup', createUser);
 app.use(router);
 app.listen(PORT);
