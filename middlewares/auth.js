@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');
+const { Unauthorized } = require('../errors/errors');
 
 const JWT_SECRET = 'process.env.JWT_SECRET';
 
@@ -18,14 +19,14 @@ function getCookie(req) {
 const auth = (req, res, next) => {
   const cookies = getCookie(req);
   if (!cookies) {
-    return res.status(401).send({ message: 'Ошибка авторизации' });
+    throw new Unauthorized('Ошибка авторизации');
   }
   const token = cookies.jwt;
   let payload;
   try {
     payload = jwt.verify(token, JWT_SECRET);
-  } catch (err) {
-    return res.status(401).send({ message: 'Ошибка авторизации' });
+  } catch {
+    throw new Unauthorized('Ошибка авторизации');
   }
 
   req.user = payload;
@@ -39,7 +40,7 @@ const auth = (req, res, next) => {
 //   try {
 //     payload = jwt.verify(token, JWT_SECRET)
 //   } catch {
-//     return res.status(401).send({message: 'Ошибка авторизации'});
+//     throw new Unauthorized('Ошибка авторизации');
 //   }
 
 //   req.user = payload;
