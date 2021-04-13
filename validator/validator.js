@@ -82,7 +82,8 @@ const validPatchAvatar = celebrate({
 
 const validId = celebrate({
   params: {
-    _id: Joi.string().required().min(22).max(24).hex()
+    _id: Joi.string().required().min(22).max(24)
+      .hex()
       .messages({
         'string.min': 'Минимум 24 символа',
         'string.max': 'Максимум 24 символов',
@@ -115,5 +116,5 @@ module.exports = {
   validPatchUser,
   validPatchAvatar,
   validId,
-  validLogin
-}
+  validLogin,
+};
