@@ -4,10 +4,11 @@ const { Unauthorized } = require('../errors');
 const { JWT_SECRET } = process.env;
 
 const auth = (req, res, next) => {
-  const token = req.cookies.jwt;
-  if (!token) {
+  const { authorization } = req.headers;
+  if (!authorization) {
     throw new Unauthorized('Ошибка авторизации');
   }
+  const token = authorization.replace(/^Bearer /, '');
   let payload;
   try {
     payload = jwt.verify(token, JWT_SECRET);

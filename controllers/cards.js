@@ -22,7 +22,7 @@ const deleteCard = (req, res, next) => {
       if (!card) {
         throw new NotFound('Данная карточка не найдена');
       }
-      if (card.owner !== req.user._id) {
+      if (String(card.owner) !== req.user._id) {
         throw new Forbidden('Нельзя удалить чужую карточку');
       }
       return Card.findByIdAndRemove(card._id)

@@ -65,7 +65,6 @@ const patchUser = (req, res, next) => {
 const patchAvatar = (req, res, next) => {
   const { avatar } = req.body;
   User.findByIdAndUpdate(req.user._id, { avatar })
-    .orFail(new Error('NotValidId'))
     .then((user) => {
       if (!user) {
         throw new NotFound('Данный пользователь не найден');
@@ -87,8 +86,8 @@ const login = (req, res, next) => {
           if (!matched) {
             throw new Unauthorized('Неправильные почта или пароль');
           }
-          const token = jwt.sign({ id: user._id }, JWT_SECRET, { expiresIn: '7d' });
-          return res.cookie('jwt', token, { httpOnly: true, sameSite: true }).status(200).send(user);
+          const token = jwt.sign({ _id: user._id }, JWT_SECRET, { expiresIn: '7d' });
+          return res.send(token);
         });
     })
     .catch(next);

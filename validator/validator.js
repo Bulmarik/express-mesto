@@ -82,12 +82,12 @@ const validPatchAvatar = celebrate({
 
 const validId = celebrate({
   params: {
-    _id: Joi.string().required().min(22).max(24)
+    _id: Joi.string().required().min(24).max(24)
       .hex()
       .messages({
         'string.min': 'Минимум 24 символа',
         'string.max': 'Максимум 24 символов',
-        'string.hex': 'Некорректная система исчисления',
+        'string.hex': 'Некорректная система счисления',
       }),
   },
 });
